@@ -54,8 +54,12 @@ def get_question_keyboard(question_id: int):
     """Create inline keyboard for question actions."""
     keyboard = [
         [
-            InlineKeyboardButton("💡 Show Solution", callback_data=f"solution_{question_id}"),
-            InlineKeyboardButton("✅ Mark Complete", callback_data=f"complete_{question_id}"),
+            InlineKeyboardButton(
+                "💡 Show Solution", callback_data=f"solution_{question_id}"
+            ),
+            InlineKeyboardButton(
+                "✅ Mark Complete", callback_data=f"complete_{question_id}"
+            ),
         ],
         [
             InlineKeyboardButton("📅 Next Question", callback_data="daily"),
@@ -81,8 +85,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         "Use the buttons below or type a command to get started!"
     )
     await update.message.reply_text(
-        welcome_message, 
-        reply_markup=get_main_menu_keyboard()
+        welcome_message, reply_markup=get_main_menu_keyboard()
     )
 
 
@@ -120,13 +123,9 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         "  _Difficulty, timezone, notification time_\n\n"
         "*/help* - Show this help message\n"
     )
-    keyboard = [
-        [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")]
-    ]
+    keyboard = [[InlineKeyboardButton("🏠 Main Menu", callback_data="menu")]]
     await update.message.reply_text(
-        help_text, 
-        parse_mode="Markdown",
-        reply_markup=InlineKeyboardMarkup(keyboard)
+        help_text, parse_mode="Markdown", reply_markup=InlineKeyboardMarkup(keyboard)
     )
 
 
@@ -140,7 +139,7 @@ async def daily_question(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     difficulty = user_data.difficulty if user_data else None
 
     question = await question_service.get_daily_question(difficulty)
-    
+
     # Store current question in context for /solution command
     context.user_data["current_question_id"] = question.id
 
@@ -154,12 +153,12 @@ async def daily_question(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     message += f"\n{question.description}\n\n"
     if question.external_link:
         message += f"🔗 [View on LeetCode]({question.external_link})\n\n"
-    
+
     await update.message.reply_text(
-        message, 
-        parse_mode="Markdown", 
+        message,
+        parse_mode="Markdown",
         disable_web_page_preview=True,
-        reply_markup=get_question_keyboard(question.id)
+        reply_markup=get_question_keyboard(question.id),
     )
 
 
@@ -172,27 +171,27 @@ async def get_solution(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     question = await question_service.get_daily_question()
 
     if question.solution:
-        message = (
-            f"💡 *Solution for {question.title}*\n\n"
-        )
+        message = f"💡 *Solution for {question.title}*\n\n"
         if question.solution_approach:
             message += f"*Approach:* {question.solution_approach}\n\n"
         message += f"```python\n{question.solution}\n```"
-        
+
         if question.external_link:
             message += f"\n\n🔗 [View on LeetCode]({question.external_link})"
-        
+
         keyboard = [
             [
-                InlineKeyboardButton("✅ Mark Complete", callback_data=f"complete_{question.id}"),
+                InlineKeyboardButton(
+                    "✅ Mark Complete", callback_data=f"complete_{question.id}"
+                ),
                 InlineKeyboardButton("📅 Next Question", callback_data="daily"),
             ]
         ]
         await update.message.reply_text(
-            message, 
+            message,
             parse_mode="Markdown",
             disable_web_page_preview=True,
-            reply_markup=InlineKeyboardMarkup(keyboard)
+            reply_markup=InlineKeyboardMarkup(keyboard),
         )
     else:
         await update.message.reply_text("No solution available yet for this question.")
@@ -209,19 +208,19 @@ async def gallery(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     message += "\n*Available Algorithms:*\n"
     for algo in algorithms:
-        link_text = f" - [Learn more]({algo.external_link})" if algo.external_link else ""
+        link_text = (
+            f" - [Learn more]({algo.external_link})" if algo.external_link else ""
+        )
         message += f"• {algo.name} ({algo.category}){link_text}\n"
 
     message += "\nUse /search <query> to find a specific algorithm."
 
-    keyboard = [
-        [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")]
-    ]
+    keyboard = [[InlineKeyboardButton("🏠 Main Menu", callback_data="menu")]]
     await update.message.reply_text(
-        message, 
-        parse_mode="Markdown", 
+        message,
+        parse_mode="Markdown",
         disable_web_page_preview=True,
-        reply_markup=InlineKeyboardMarkup(keyboard)
+        reply_markup=InlineKeyboardMarkup(keyboard),
     )
 
 
@@ -250,9 +249,7 @@ async def search_algorithms(update: Update, context: ContextTypes.DEFAULT_TYPE) 
         message += "\n"
 
     await update.message.reply_text(
-        message, 
-        parse_mode="Markdown", 
-        disable_web_page_preview=True
+        message, parse_mode="Markdown", disable_web_page_preview=True
     )
 
 
@@ -280,18 +277,16 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         f"🌍 Timezone: {stats['timezone']}\n"
         f"⏰ Notification Time: {stats['notification_time']}"
     )
-    
+
     keyboard = [
         [
             InlineKeyboardButton("🔥 Streak Details", callback_data="streak"),
             InlineKeyboardButton("📜 History", callback_data="history"),
         ],
-        [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")]
+        [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")],
     ]
     await update.message.reply_text(
-        message, 
-        parse_mode="Markdown",
-        reply_markup=InlineKeyboardMarkup(keyboard)
+        message, parse_mode="Markdown", reply_markup=InlineKeyboardMarkup(keyboard)
     )
 
 
@@ -319,7 +314,9 @@ async def streak_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         fire_icons += f" +{streak_count - 10}"
 
     last_completion = streak_info.get("last_completion")
-    last_completion_str = last_completion.strftime("%Y-%m-%d %H:%M UTC") if last_completion else "Never"
+    last_completion_str = (
+        last_completion.strftime("%Y-%m-%d %H:%M UTC") if last_completion else "Never"
+    )
 
     message = (
         f"🔥 *Streak Information*\n\n"
@@ -329,7 +326,7 @@ async def streak_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         f"*Total Questions:* {streak_info.get('total_questions', 0)}\n"
         f"*Last Completion:* {last_completion_str}\n\n"
     )
-    
+
     if streak_count == 0:
         message += "💪 Start your streak today with /daily!"
     elif streak_count < 7:
@@ -344,12 +341,10 @@ async def streak_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
             InlineKeyboardButton("📅 Daily Question", callback_data="daily"),
             InlineKeyboardButton("📜 History", callback_data="history"),
         ],
-        [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")]
+        [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")],
     ]
     await update.message.reply_text(
-        message, 
-        parse_mode="Markdown",
-        reply_markup=InlineKeyboardMarkup(keyboard)
+        message, parse_mode="Markdown", reply_markup=InlineKeyboardMarkup(keyboard)
     )
 
 
@@ -366,7 +361,7 @@ async def history_command(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         return
 
     history = await user_service.get_history(str(user.id), limit=10)
-    
+
     if not history:
         message = (
             "📜 *Question History*\n\n"
@@ -376,9 +371,13 @@ async def history_command(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     else:
         message = "📜 *Recently Completed Questions*\n\n"
         for i, item in enumerate(history, 1):
-            completed_at = item["completed_at"].strftime("%m/%d") if item["completed_at"] else ""
-            difficulty_emoji = {"Easy": "🟢", "Medium": "🟡", "Hard": "🔴"}.get(item["difficulty"], "⚪")
-            
+            completed_at = (
+                item["completed_at"].strftime("%m/%d") if item["completed_at"] else ""
+            )
+            difficulty_emoji = {"Easy": "🟢", "Medium": "🟡", "Hard": "🔴"}.get(
+                item["difficulty"], "⚪"
+            )
+
             message += f"{i}. {difficulty_emoji} *{item['title']}*\n"
             message += f"   {item['category']} • {completed_at}\n"
             if item.get("external_link"):
@@ -390,13 +389,13 @@ async def history_command(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
             InlineKeyboardButton("📅 Daily Question", callback_data="daily"),
             InlineKeyboardButton("🔥 Streak", callback_data="streak"),
         ],
-        [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")]
+        [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")],
     ]
     await update.message.reply_text(
-        message, 
+        message,
         parse_mode="Markdown",
         disable_web_page_preview=True,
-        reply_markup=InlineKeyboardMarkup(keyboard)
+        reply_markup=InlineKeyboardMarkup(keyboard),
     )
 
 
@@ -404,26 +403,26 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     """Handle inline keyboard button callbacks."""
     query = update.callback_query
     await query.answer()
-    
+
     user = update.effective_user
     if user is None:
         return
-    
+
     data = query.data
-    
+
     if data == "menu":
         await query.edit_message_text(
             "🏠 *Main Menu*\n\nWhat would you like to do?",
             parse_mode="Markdown",
-            reply_markup=get_main_menu_keyboard()
+            reply_markup=get_main_menu_keyboard(),
         )
-    
+
     elif data == "daily":
         user_data = await user_service.get_user(str(user.id))
         difficulty = user_data.difficulty if user_data else None
         question = await question_service.get_daily_question(difficulty)
         context.user_data["current_question_id"] = question.id
-        
+
         message = (
             f"📅 *Today's Question*\n\n"
             f"*{question.title}* ({question.difficulty.value})\n"
@@ -434,18 +433,18 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         message += f"\n{question.description}\n\n"
         if question.external_link:
             message += f"🔗 [View on LeetCode]({question.external_link})"
-        
+
         await query.edit_message_text(
             message,
             parse_mode="Markdown",
             disable_web_page_preview=True,
-            reply_markup=get_question_keyboard(question.id)
+            reply_markup=get_question_keyboard(question.id),
         )
-    
+
     elif data == "gallery":
         algorithms = await algorithm_service.get_all_algorithms()
         categories = await algorithm_service.get_categories()
-        
+
         message = "📚 *Algorithm Gallery*\n\n*Categories:*\n"
         for cat in categories:
             message += f"• {cat}\n"
@@ -453,14 +452,12 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         for algo in algorithms[:8]:  # Limit to avoid message too long
             message += f"• {algo.name} ({algo.category})\n"
         message += "\nUse /search <query> to find more."
-        
+
         keyboard = [[InlineKeyboardButton("🏠 Main Menu", callback_data="menu")]]
         await query.edit_message_text(
-            message,
-            parse_mode="Markdown",
-            reply_markup=InlineKeyboardMarkup(keyboard)
+            message, parse_mode="Markdown", reply_markup=InlineKeyboardMarkup(keyboard)
         )
-    
+
     elif data == "stats":
         stats = await user_service.get_stats(str(user.id))
         if stats:
@@ -472,17 +469,15 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
             )
         else:
             message = "Use /start first to initialize your profile."
-        
+
         keyboard = [
             [InlineKeyboardButton("🔥 Streak", callback_data="streak")],
-            [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")]
+            [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")],
         ]
         await query.edit_message_text(
-            message,
-            parse_mode="Markdown",
-            reply_markup=InlineKeyboardMarkup(keyboard)
+            message, parse_mode="Markdown", reply_markup=InlineKeyboardMarkup(keyboard)
         )
-    
+
     elif data == "streak":
         streak_info = await user_service.get_streak_info(str(user.id))
         if streak_info:
@@ -496,44 +491,44 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
             )
         else:
             message = "Use /start first to initialize your profile."
-        
+
         keyboard = [
             [InlineKeyboardButton("📅 Daily", callback_data="daily")],
-            [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")]
+            [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")],
         ]
         await query.edit_message_text(
-            message,
-            parse_mode="Markdown",
-            reply_markup=InlineKeyboardMarkup(keyboard)
+            message, parse_mode="Markdown", reply_markup=InlineKeyboardMarkup(keyboard)
         )
-    
+
     elif data == "history":
         history = await user_service.get_history(str(user.id), limit=5)
         if history:
             message = "📜 *Recent Questions*\n\n"
             for item in history:
-                emoji = {"Easy": "🟢", "Medium": "🟡", "Hard": "🔴"}.get(item["difficulty"], "⚪")
+                emoji = {"Easy": "🟢", "Medium": "🟡", "Hard": "🔴"}.get(
+                    item["difficulty"], "⚪"
+                )
                 message += f"{emoji} {item['title']}\n"
         else:
             message = "📜 No completed questions yet.\nStart with /daily!"
-        
+
         keyboard = [
             [InlineKeyboardButton("📅 Daily", callback_data="daily")],
-            [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")]
+            [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")],
         ]
         await query.edit_message_text(
-            message,
-            parse_mode="Markdown",
-            reply_markup=InlineKeyboardMarkup(keyboard)
+            message, parse_mode="Markdown", reply_markup=InlineKeyboardMarkup(keyboard)
         )
-    
+
     elif data == "preferences":
         await query.edit_message_text(
             "⚙️ *Preferences*\n\nUse /preferences command to update your settings.",
             parse_mode="Markdown",
-            reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🏠 Main Menu", callback_data="menu")]])
+            reply_markup=InlineKeyboardMarkup(
+                [[InlineKeyboardButton("🏠 Main Menu", callback_data="menu")]]
+            ),
         )
-    
+
     elif data == "help":
         help_text = (
             "📚 *Quick Help*\n\n"
@@ -548,9 +543,9 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         await query.edit_message_text(
             help_text,
             parse_mode="Markdown",
-            reply_markup=InlineKeyboardMarkup(keyboard)
+            reply_markup=InlineKeyboardMarkup(keyboard),
         )
-    
+
     elif data.startswith("solution_"):
         question_id = int(data.split("_")[1])
         question = await question_service.get_solution(question_id)
@@ -560,39 +555,41 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
                 message += f"\n\n[Full solution on LeetCode]({question.external_link})"
         else:
             message = "Solution not available."
-        
+
         keyboard = [
-            [InlineKeyboardButton("✅ Complete", callback_data=f"complete_{question_id}")],
-            [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")]
+            [
+                InlineKeyboardButton(
+                    "✅ Complete", callback_data=f"complete_{question_id}"
+                )
+            ],
+            [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")],
         ]
         await query.edit_message_text(
             message,
             parse_mode="Markdown",
             disable_web_page_preview=True,
-            reply_markup=InlineKeyboardMarkup(keyboard)
+            reply_markup=InlineKeyboardMarkup(keyboard),
         )
-    
+
     elif data.startswith("complete_"):
         question_id = int(data.split("_")[1])
         await user_service.record_question_completion(str(user.id), question_id)
-        
+
         streak_info = await user_service.get_streak_info(str(user.id))
         streak = streak_info.get("current_streak", 1) if streak_info else 1
-        
+
         message = (
             f"✅ *Question Completed!*\n\n"
             f"🔥 Current Streak: {streak} days\n\n"
             "Great work! Keep it up! 💪"
         )
-        
+
         keyboard = [
             [InlineKeyboardButton("📅 Next Question", callback_data="daily")],
-            [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")]
+            [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")],
         ]
         await query.edit_message_text(
-            message,
-            parse_mode="Markdown",
-            reply_markup=InlineKeyboardMarkup(keyboard)
+            message, parse_mode="Markdown", reply_markup=InlineKeyboardMarkup(keyboard)
         )
 
 
@@ -624,37 +621,72 @@ async def preferences(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
 
 async def set_difficulty(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     choice = update.message.text.strip()
+    waiting_for = context.chat_data.get("waiting_for")
 
-    if choice == "1":
-        await update.message.reply_text(
-            "Select difficulty:\n1. Easy\n2. Medium\n3. Hard"
-        )
-        return SET_DIFFICULTY
-    elif choice == "2":
-        await update.message.reply_text(
-            "Enter your timezone (e.g., America/New_York, Europe/London):"
-        )
-        return SET_TIMEZONE
-    elif choice == "3":
-        await update.message.reply_text("Enter notification time (e.g., 09:00, 18:30):")
-        return SET_TIME
-    elif choice in ["1", "2", "3"]:
-        difficulty_map = {
-            "1": Difficulty.EASY,
-            "2": Difficulty.MEDIUM,
-            "3": Difficulty.HARD,
-        }
+    if waiting_for == "difficulty_level":
+        if choice in ["1", "2", "3"]:
+            difficulty_map = {
+                "1": Difficulty.EASY,
+                "2": Difficulty.MEDIUM,
+                "3": Difficulty.HARD,
+            }
+            if user := await user_service.get_user(str(update.effective_user.id)):
+                await user_service.update_preferences(
+                    str(update.effective_user.id), difficulty=difficulty_map.get(choice)
+                )
+                await update.message.reply_text(
+                    f"Difficulty updated to {difficulty_map[choice].value}!"
+                )
+            context.chat_data.pop("waiting_for", None)
+            return ConversationHandler.END
+        else:
+            await update.message.reply_text(
+                "Invalid choice. Please reply with 1, 2, or 3."
+            )
+            return SET_DIFFICULTY
+
+    elif waiting_for == "timezone":
         if user := await user_service.get_user(str(update.effective_user.id)):
             await user_service.update_preferences(
-                str(update.effective_user.id), difficulty=difficulty_map.get(choice)
+                str(update.effective_user.id), timezone=choice
             )
-            await update.message.reply_text(
-                f"Difficulty updated to {difficulty_map[choice].value}!"
-            )
+            await update.message.reply_text(f"Timezone updated to {choice}!")
+        context.chat_data.pop("waiting_for", None)
         return ConversationHandler.END
+
+    elif waiting_for == "time":
+        if user := await user_service.get_user(str(update.effective_user.id)):
+            await user_service.update_preferences(
+                str(update.effective_user.id), notification_time=choice
+            )
+            await update.message.reply_text(f"Notification time updated to {choice}!")
+        context.chat_data.pop("waiting_for", None)
+        return ConversationHandler.END
+
     else:
-        await update.message.reply_text("Invalid choice. Please reply with 1, 2, or 3.")
-        return SET_DIFFICULTY
+        if choice == "1":
+            await update.message.reply_text(
+                "Select difficulty:\n1. Easy\n2. Medium\n3. Hard"
+            )
+            context.chat_data["waiting_for"] = "difficulty_level"
+            return SET_DIFFICULTY
+        elif choice == "2":
+            await update.message.reply_text(
+                "Enter your timezone (e.g., America/New_York, Europe/London):"
+            )
+            context.chat_data["waiting_for"] = "timezone"
+            return SET_TIMEZONE
+        elif choice == "3":
+            await update.message.reply_text(
+                "Enter notification time (e.g., 09:00, 18:30):"
+            )
+            context.chat_data["waiting_for"] = "time"
+            return SET_TIME
+        else:
+            await update.message.reply_text(
+                "Invalid choice. Please reply with 1, 2, or 3."
+            )
+            return SET_DIFFICULTY
 
 
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
@@ -665,13 +697,13 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 async def post_init(application) -> None:
     """Initialize database and notification service on startup."""
     from database.seed_data import seed_database
-    
+
     try:
         await seed_database()
         logger.info("Database initialized successfully")
     except Exception as e:
         logger.warning(f"Database initialization failed (will use fallback): {e}")
-    
+
     # Initialize notification service
     notification_service.initialize(application.bot)
     notification_service.start()

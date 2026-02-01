@@ -10,7 +10,12 @@ from main import (
     gallery,
     search_algorithms,
     stats,
+    set_difficulty,
+    preferences,
+    SET_DIFFICULTY,
 )
+from telegram.ext import ConversationHandler
+from models.models import Difficulty
 
 
 class TestBotCommands:
@@ -154,3 +159,104 @@ class TestBotCommands:
             call_args = mock_update.message.reply_text.call_args[0][0]
             assert "Your Statistics" in call_args
             assert "5" in call_args
+
+    @pytest.mark.asyncio
+    async def test_set_difficulty_menu_selection(self, mock_update, mock_context):
+        with patch("main.user_service") as mock_user_service:
+            mock_user_service.get_user = AsyncMock(
+                return_value=MagicMock(
+                    telegram_id="12345",
+                    difficulty=MagicMock(value="Easy"),
+                    timezone="UTC",
+                    notification_time="09:00",
+                )
+            )
+            mock_user_service.update_preferences = AsyncMock()
+
+            mock_update.message.text = "1"
+            mock_context.chat_data = {}
+
+            result = await set_difficulty(mock_update, mock_context)
+
+            assert result == SET_DIFFICULTY
+            mock_update.message.reply_text.assert_called_once()
+            call_args = mock_update.message.reply_text.call_args[0][0]
+            assert "Select difficulty" in call_args
+            assert mock_context.chat_data["waiting_for"] == "difficulty_level"
+
+    @pytest.mark.asyncio
+    async def test_set_difficulty_update_difficulty(self, mock_update, mock_context):
+        with patch("main.user_service") as mock_user_service:
+            mock_user_service.get_user = AsyncMock(
+                return_value=MagicMock(telegram_id="12345")
+            )
+            mock_user_service.update_preferences = AsyncMock()
+
+            mock_update.message.text = "2"
+            mock_context.chat_data = {"waiting_for": "difficulty_level"}
+
+            result = await set_difficulty(mock_update, mock_context)
+
+            assert result == ConversationHandler.END
+            mock_user_service.update_preferences.assert_called_once()
+            call_args = mock_user_service.update_preferences.call_args
+            assert call_args[1]["difficulty"] == Difficulty.MEDIUM
+            mock_update.message.reply_text.assert_called_once_with(
+                "Difficulty updated to Medium!"
+            )
+
+    @pytest.mark.asyncio
+    async def test_set_difficulty_update_timezone(self, mock_update, mock_context):
+        with patch("main.user_service") as mock_user_service:
+            mock_user_service.get_user = AsyncMock(
+                return_value=MagicMock(telegram_id="12345")
+            )
+            mock_user_service.update_preferences = AsyncMock()
+
+            mock_update.message.text = "America/New_York"
+            mock_context.chat_data = {"waiting_for": "timezone"}
+
+            result = await set_difficulty(mock_update, mock_context)
+
+            assert result == ConversationHandler.END
+            mock_user_service.update_preferences.assert_called_once_with(
+                "12345", timezone="America/New_York"
+            )
+            mock_update.message.reply_text.assert_called_once_with(
+                "Timezone updated to America/New_York!"
+            )
+
+    @pytest.mark.asyncio
+    async def test_set_difficulty_update_notification_time(
+        self, mock_update, mock_context
+    ):
+        with patch("main.user_service") as mock_user_service:
+            mock_user_service.get_user = AsyncMock(
+                return_value=MagicMock(telegram_id="12345")
+            )
+            mock_user_service.update_preferences = AsyncMock()
+
+            mock_update.message.text = "18:30"
+            mock_context.chat_data = {"waiting_for": "time"}
+
+            result = await set_difficulty(mock_update, mock_context)
+
+            assert result == ConversationHandler.END
+            mock_user_service.update_preferences.assert_called_once_with(
+                "12345", notification_time="18:30"
+            )
+            mock_update.message.reply_text.assert_called_once_with(
+                "Notification time updated to 18:30!"
+            )
+
+    @pytest.mark.asyncio
+    async def test_set_difficulty_invalid_choice(self, mock_update, mock_context):
+        mock_update.message.text = "5"
+        mock_context.chat_data = {}
+
+        result = await set_difficulty(mock_update, mock_context)
+
+        assert result == SET_DIFFICULTY
+        mock_update.message.reply_text.assert_called_once_with(
+            "Invalid choice. Please reply with 1, 2, or 3."
+        )
