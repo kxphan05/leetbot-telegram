@@ -1742,6 +1742,709 @@ def topKFrequent(nums, k):
         ],
         "external_link": "https://leetcode.com/problems/path-sum-iii/",
     },
+    {
+        "leetcode_id": 448,
+        "title": "Find All Numbers Disappeared in an Array",
+        "difficulty": "Easy",
+        "category": "Array",
+        "description": "Given an array nums of n integers where nums[i] is in the range [1, n], return an array of all the integers in the range [1, n] that do not appear in nums.",
+        "solution": """def findDisappearedNumbers(nums):
+    n = len(nums)
+    for num in nums:
+        index = abs(num) - 1
+        nums[index] = -abs(nums[index])
+    return [i + 1 for i, x in enumerate(nums) if x > 0]""",
+        "solution_approach": "In-place Marking",
+        "examples": [
+            {
+                "input": "nums = [4,3,2,7,8,2,3,1]",
+                "output": "[5,6]",
+                "explanation": "5 and 6 are missing from the array.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/find-all-numbers-disappeared-in-an-array/",
+    },
+    {
+        "leetcode_id": 461,
+        "title": "Hamming Distance",
+        "difficulty": "Easy",
+        "category": "Bit Manipulation",
+        "description": "Given two integers x and y, return the Hamming distance between their binary representations.",
+        "solution": """def hammingDistance(x, y):
+    return bin(x ^ y).count('1')""",
+        "solution_approach": "XOR and Bit Count",
+        "examples": [
+            {
+                "input": "x = 1, y = 4",
+                "output": "2",
+                "explanation": "1 (01) and 4 (100) differ in 2 bits.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/hamming-distance/",
+    },
+    {
+        "leetcode_id": 543,
+        "title": "Diameter of Binary Tree",
+        "difficulty": "Easy",
+        "category": "Tree",
+        "description": "Given the root of a binary tree, return the length of the diameter of the tree. The diameter is the longest path between any two nodes in the tree.",
+        "solution": """def diameterOfBinaryTree(root):
+    max_diameter = 0
+    def depth(node):
+        if not node:
+            return 0
+        left = depth(node.left)
+        right = depth(node.right)
+        nonlocal max_diameter
+        max_diameter = max(max_diameter, left + right)
+        return 1 + max(left, right)
+    depth(root)
+    return max_diameter""",
+        "solution_approach": "DFS with Diameter Tracking",
+        "examples": [
+            {
+                "input": "root = [1,2,3,4,5]",
+                "output": "3",
+                "explanation": "Diameter: 4->2->1->3 or 4->2->1->3.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/diameter-of-binary-tree/",
+    },
+    {
+        "leetcode_id": 617,
+        "title": "Merge Two Binary Trees",
+        "difficulty": "Easy",
+        "category": "Tree",
+        "description": "You are given two binary trees root1 and root2. Imagine that when you put one of them to cover the other, some nodes of the two trees overlap while others are not. Merge the two trees into a single binary tree.",
+        "solution": """def mergeTrees(root1, root2):
+    if not root1:
+        return root2
+    if not root2:
+        return root1
+    root1.val += root2.val
+    root1.left = mergeTrees(root1.left, root2.left)
+    root1.right = mergeTrees(root1.right, root2.right)
+    return root1""",
+        "solution_approach": "Recursive Tree Merging",
+        "examples": [
+            {
+                "input": "root1 = [1,3,2,5], root2 = [2,1,3,null,4,7]",
+                "output": "[3,4,5,5,4,null,7]",
+                "explanation": "Trees merged together.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/merge-two-binary-trees/",
+    },
+    {
+        "leetcode_id": 704,
+        "title": "Binary Search",
+        "difficulty": "Easy",
+        "category": "Binary Search",
+        "description": "Given a sorted array of integers nums and an integer target, search for target in nums. If target exists, return its index. Otherwise, return -1.",
+        "solution": """def search(nums, target):
+    left, right = 0, len(nums) - 1
+    while left <= right:
+        mid = (left + right) // 2
+        if nums[mid] == target:
+            return mid
+        elif nums[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    return -1""",
+        "solution_approach": "Standard Binary Search",
+        "examples": [
+            {
+                "input": "nums = [-1,0,3,5,9,12], target = 9",
+                "output": "4",
+                "explanation": "9 is at index 4.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/binary-search/",
+    },
+    {
+        "leetcode_id": 733,
+        "title": "Flood Fill",
+        "difficulty": "Easy",
+        "category": "DFS",
+        "description": "An image is represented by an m x n integer grid image where image[i][j] represents the pixel value of the image. Starting from the pixel image[sr][sc], flood fill the image.",
+        "solution": """def floodFill(image, sr, sc, newColor):
+    from collections import deque
+    rows, cols = len(image), len(image[0])
+    original = image[sr][sc]
+    if original == newColor:
+        return image
+    queue = deque([(sr, sc)])
+    image[sr][sc] = newColor
+    while queue:
+        r, c = queue.popleft()
+        for dr, dc in [(1,0),(-1,0),(0,1),(0,-1)]:
+            nr, nc = r + dr, c + dc
+            if 0 <= nr < rows and 0 <= nc < cols and image[nr][nc] == original:
+                image[nr][nc] = newColor
+                queue.append((nr, nc))
+    return image""",
+        "solution_approach": "BFS Flood Fill",
+        "examples": [
+            {
+                "input": "image = [[1,1,1],[1,1,0],[1,0,1]], sr = 1, sc = 1, newColor = 2",
+                "output": "[[2,2,2],[2,2,0],[2,0,1]]",
+                "explanation": "Center pixel and connected pixels changed to 2.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/flood-fill/",
+    },
+    {
+        "leetcode_id": 763,
+        "title": "Partition Labels",
+        "difficulty": "Medium",
+        "category": "Greedy",
+        "description": "Given a string s, partition the string into as many parts as possible such that each letter appears in at most one part. Return an array representing the size of each part.",
+        "solution": """def partitionLabels(s):
+    last = {c: i for i, c in enumerate(s)}
+    result = []
+    start, end = 0, 0
+    for i, c in enumerate(s):
+        end = max(end, last[c])
+        if i == end:
+            result.append(end - start + 1)
+            start = i + 1
+    return result""",
+        "solution_approach": "Last Occurrence Tracking",
+        "examples": [
+            {
+                "input": "s = ababcbacadefegdehijhklij",
+                "output": "[9,7,8]",
+                "explanation": "Partitions based on character ranges.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/partition-labels/",
+    },
+    {
+        "leetcode_id": 841,
+        "title": "Keys and Rooms",
+        "difficulty": "Medium",
+        "category": "DFS",
+        "description": "There are n rooms labeled from 0 to n - 1. Each room has a list of keys that can open other rooms. Return true if you can visit all rooms starting from room 0.",
+        "solution": """def canVisitAllRooms(rooms):
+    visited = {0}
+    stack = [0]
+    while stack:
+        room = stack.pop()
+        for key in rooms[room]:
+            if key not in visited:
+                visited.add(key)
+                stack.append(key)
+    return len(visited) == len(rooms)""",
+        "solution_approach": "DFS with Stack",
+        "examples": [
+            {
+                "input": "rooms = [[1],[2],[3],[]]",
+                "output": "true",
+                "explanation": "Can visit all rooms.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/keys-and-rooms/",
+    },
+    {
+        "leetcode_id": 876,
+        "title": "Middle of the Linked List",
+        "difficulty": "Easy",
+        "category": "Linked List",
+        "description": "Given the head of a singly linked list, return the middle node of the list. If there are two middle nodes, return the second one.",
+        "solution": """def middleNode(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+    return slow""",
+        "solution_approach": "Slow and Fast Pointers",
+        "examples": [
+            {
+                "input": "head = [1,2,3,4,5]",
+                "output": "[3,4,5]",
+                "explanation": "Middle is node 3.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/middle-of-the-linked-list/",
+    },
+    {
+        "leetcode_id": 897,
+        "title": "Increasing Order Search Tree",
+        "difficulty": "Easy",
+        "category": "Tree",
+        "description": "Given the root of a binary search tree, rearrange the tree in in-order such that the leftmost node becomes the new root, and every node has no left child.",
+        "solution": """def increasingBST(root):
+    dummy = TreeNode(-1)
+    curr = dummy
+    def inorder(node):
+        if not node:
+            return
+        inorder(node.left)
+        node.left = None
+        curr.right = node
+        curr = node
+        inorder(node.right)
+    inorder(root)
+    return dummy.right""",
+        "solution_approach": "In-order Traversal with Restructuring",
+        "examples": [
+            {
+                "input": "root = [5,3,6,2,4,null,8,1,null,null,null,null,null,9,null,null,7]",
+                "output": "[1,null,2,null,3,null,4,null,5,null,6,null,7,null,8,null,9]",
+                "explanation": "Tree restructured to right-only chain.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/increasing-order-search-tree/",
+    },
+    {
+        "leetcode_id": 905,
+        "title": "Sort Array By Parity",
+        "difficulty": "Easy",
+        "category": "Array",
+        "description": "Given an integer array nums, move all the even integers at the beginning of the array followed by all the odd integers.",
+        "solution": """def sortArrayByParity(nums):
+    return [x for x in nums if x % 2 == 0] + [x for x in nums if x % 2 == 1]""",
+        "solution_approach": "List Comprehension",
+        "examples": [
+            {
+                "input": "nums = [3,1,2,4]",
+                "output": "[2,4,3,1]",
+                "explanation": "Even numbers first, then odd.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/sort-array-by-parity/",
+    },
+    {
+        "leetcode_id": 994,
+        "title": "Rotting Oranges",
+        "difficulty": "Medium",
+        "category": "BFS",
+        "description": "Given a grid where each cell can be fresh (1), rotten (2), or empty (0), return the minimum number of minutes that must elapse until no cell is fresh. If impossible, return -1.",
+        "solution": """def orangesRotting(grid):
+    from collections import deque
+    rows, cols = len(grid), len(grid[0])
+    queue = deque()
+    fresh = 0
+    for i in range(rows):
+        for j in range(cols):
+            if grid[i][j] == 2:
+                queue.append((i, j, 0))
+            elif grid[i][j] == 1:
+                fresh += 1
+    minutes = 0
+    while queue:
+        i, j, minutes = queue.popleft()
+        for di, dj in [(1,0),(-1,0),(0,1),(0,-1)]:
+            ni, nj = i + di, j + dj
+            if 0 <= ni < rows and 0 <= nj < cols and grid[ni][nj] == 1:
+                grid[ni][nj] = 2
+                fresh -= 1
+                queue.append((ni, nj, minutes + 1))
+    return minutes if fresh == 0 else -1""",
+        "solution_approach": "BFS Multi-source",
+        "examples": [
+            {
+                "input": "grid = [[2,1,1],[1,1,0],[0,1,1]]",
+                "output": "4",
+                "explanation": "All oranges rot in 4 minutes.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/rotting-oranges/",
+    },
+    {
+        "leetcode_id": 1025,
+        "title": "Divisor Game",
+        "difficulty": "Easy",
+        "category": "Math",
+        "description": "Alice and Bob take turns playing a game with a number N. Alice starts first. In each turn, a player chooses x (0 < x < N) such that N % x == 0 and subtracts x from N. Return true if Alice wins.",
+        "solution": """def divisorGame(n):
+    return n % 2 == 0""",
+        "solution_approach": "Mathematical Insight",
+        "examples": [
+            {
+                "input": "n = 2",
+                "output": "true",
+                "explanation": "Alice chooses 1, wins.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/divisor-game/",
+    },
+    {
+        "leetcode_id": 1046,
+        "title": "Last Stone Weight",
+        "difficulty": "Easy",
+        "category": "Heap",
+        "description": "You are given an array of integers stones where stones[i] is the weight of the ith stone. On each turn, we choose the heaviest two stones and smash them together. Return the weight of the last remaining stone.",
+        "solution": """import heapq
+
+def lastStoneWeight(stones):
+    stones = [-s for s in stones]
+    heapq.heapify(stones)
+    while len(stones) > 1:
+        y = -heapq.heappop(stones)
+        x = -heapq.heappop(stones)
+        if y != x:
+            heapq.heappush(stones, -(y - x))
+    return -stones[0] if stones else 0""",
+        "solution_approach": "Max Heap Simulation",
+        "examples": [
+            {
+                "input": "stones = [2,7,4,1,8,1]",
+                "output": "1",
+                "explanation": "Last remaining stone weight is 1.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/last-stone-weight/",
+    },
+    {
+        "leetcode_id": 1089,
+        "title": "Duplicate Zeros",
+        "difficulty": "Easy",
+        "category": "Array",
+        "description": "Given a fixed-length array arr of integers, duplicate each occurrence of zero, shifting the remaining elements to the right. Elements beyond the array length are discarded.",
+        "solution": """def duplicateZeros(arr):
+    i = 0
+    length = len(arr)
+    zeros = arr.count(0)
+    for j in range(length - 1, -1, -1):
+        if j + zeros < length:
+            arr[j + zeros] = arr[j]
+        if arr[j] == 0:
+            zeros -= 1
+            if j + zeros < length:
+                arr[j + zeros] = 0""",
+        "solution_approach": "Reverse Copy",
+        "examples": [
+            {
+                "input": "arr = [1,0,2,3,0,4,5,6]",
+                "output": "[1,0,0,2,3,0,0,4]",
+                "explanation": "Zeros duplicated, extra elements discarded.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/duplicate-zeros/",
+    },
+    {
+        "leetcode_id": 1108,
+        "title": "Defanging an IP Address",
+        "difficulty": "Easy",
+        "category": "String",
+        "description": "Given a valid (IPv4) IP address, return a defanged version of that IP address. A defanged IP address replaces every dot . with [.].",
+        "solution": """def defangIPaddr(address):
+    return address.replace(".", "[.]")""",
+        "solution_approach": "String Replace",
+        "examples": [
+            {
+                "input": "address = 1.1.1.1",
+                "output": "1[.]1[.]1[.]1[.]1",
+                "explanation": "Dots replaced with [.].",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/defanging-an-ip-address/",
+    },
+    {
+        "leetcode_id": 1122,
+        "title": "Relative Sort Array",
+        "difficulty": "Easy",
+        "category": "Array",
+        "description": "Given two arrays arr1 and arr2, sort arr1 such that the order of elements in arr1 should be the same as their order in arr2. Elements not in arr2 come at the end in sorted order.",
+        "solution": """def relativeSortArray(arr1, arr2):
+    from collections import Counter
+    count = Counter(arr1)
+    result = []
+    for num in arr2:
+        result.extend([num] * count[num])
+        count[num] = 0
+    for num in sorted(count):
+        result.extend([num] * count[num])
+    return result""",
+        "solution_approach": "Counting Sort",
+        "examples": [
+            {
+                "input": "arr1 = [2,3,1,3,2,4,6,7,9,2,19], arr2 = [2,1,4,3,6,7]",
+                "output": "[2,2,2,1,4,3,3,6,7,9,19]",
+                "explanation": "arr1 sorted according to arr2 order.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/relative-sort-array/",
+    },
+    {
+        "leetcode_id": 1207,
+        "title": "Unique Number of Occurrences",
+        "difficulty": "Easy",
+        "category": "Hash Table",
+        "description": "Given an array arr, return true if the number of distinct values in the array is equal to the number of distinct values in the occurrences array.",
+        "solution": """def uniqueOccurrences(arr):
+    from collections import Counter
+    count = Counter(arr)
+    return len(count.values()) == len(set(count.values()))""",
+        "solution_approach": "Counter Comparison",
+        "examples": [
+            {
+                "input": "arr = [1,2,2,1,1,3]",
+                "output": "true",
+                "explanation": "Occurrences: 1->3, 2->2, 3->1. All unique.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/unique-number-of-occurrences/",
+    },
+    {
+        "leetcode_id": 1217,
+        "title": "Move Chips",
+        "difficulty": "Easy",
+        "category": "Math",
+        "description": "We have n chips, where the position of the ith chip is position[i]. We can move any chip to any position with the same parity. Return the minimum number of moves required.",
+        "solution": """def minMovesToMoveChips(chips):
+    even = sum(1 for c in chips if c % 2 == 0)
+    odd = len(chips) - even
+    return min(even, odd)""",
+        "solution_approach": "Parity Counting",
+        "examples": [
+            {
+                "input": "chips = [1,2,3]",
+                "output": "2",
+                "explanation": "Move 1 and 3 to position 2.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/minimum-moves-to-equal-array-elements/",
+    },
+    {
+        "leetcode_id": 1221,
+        "title": "Split a String in Balanced Strings",
+        "difficulty": "Easy",
+        "category": "Greedy",
+        "description": "Given a balanced string s, split it into as many balanced substrings as possible. Return the maximum number of balanced substrings.",
+        "solution": """def balancedStringSplit(s):
+    balance = 0
+    count = 0
+    for char in s:
+        if char == 'L':
+            balance += 1
+        else:
+            balance -= 1
+        if balance == 0:
+            count += 1
+    return count""",
+        "solution_approach": "Balance Counter",
+        "examples": [
+            {
+                "input": "s = RLRRLLRLRL",
+                "output": "4",
+                "explanation": "4 balanced substrings.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/split-a-string-in-balanced-strings/",
+    },
+    {
+        "leetcode_id": 1281,
+        "title": "Subtract the Product and Sum of Digits",
+        "difficulty": "Easy",
+        "category": "Math",
+        "description": "Given an integer n, return the difference between the product of its digits and the sum of its digits.",
+        "solution": """def subtractProductAndSum(n):
+    product = 1
+    sum_digits = 0
+    while n:
+        digit = n % 10
+        product *= digit
+        sum_digits += digit
+        n //= 10
+    return product - sum_digits""",
+        "solution_approach": "Digit Extraction",
+        "examples": [
+            {
+                "input": "n = 234",
+                "output": "15",
+                "explanation": "Product: 24, Sum: 9, Difference: 15.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/subtract-the-product-and-sum-of-digits-of-an-integer/",
+    },
+    {
+        "leetcode_id": 1290,
+        "title": "Convert Binary Linked List to Integer",
+        "difficulty": "Easy",
+        "category": "Linked List",
+        "description": "Given the head of a singly linked list where each node represents a bit of the binary number, return its decimal value.",
+        "solution": """def getDecimalValue(head):
+    result = 0
+    while head:
+        result = result * 2 + head.val
+        head = head.next
+    return result""",
+        "solution_approach": "Bit Accumulation",
+        "examples": [
+            {
+                "input": "head = [1,0,1]",
+                "output": "5",
+                "explanation": "Binary 101 = 5.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/convert-binary-number-in-a-linked-list-to-integer/",
+    },
+    {
+        "leetcode_id": 1295,
+        "title": "Find Numbers with Even Digits",
+        "difficulty": "Easy",
+        "category": "Array",
+        "description": "Given an array of integers nums, return the count of numbers that have an even number of digits.",
+        "solution": """def findNumbers(nums):
+    count = 0
+    for num in nums:
+        if len(str(num)) % 2 == 0:
+            count += 1
+    return count""",
+        "solution_approach": "Digit Count",
+        "examples": [
+            {
+                "input": "nums = [12,345,2,6,7896]",
+                "output": "2",
+                "explanation": "12 and 7896 have even digits.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/find-numbers-with-even-number-of-digits/",
+    },
+    {
+        "leetcode_id": 1313,
+        "title": "Decompress Run-Length Encoded List",
+        "difficulty": "Easy",
+        "category": "Array",
+        "description": "We are given a list of integers nums. The list contains pairs [freq, val]. Decompress it to create a new list.",
+        "solution": """def decompressRLElist(nums):
+    result = []
+    for i in range(0, len(nums), 2):
+        result.extend([nums[i+1]] * nums[i])
+    return result""",
+        "solution_approach": "List Extension",
+        "examples": [
+            {
+                "input": "nums = [1,2,3,4]",
+                "output": "[2,4,4,4]",
+                "explanation": "2 repeated once, 4 repeated three times.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/decompress-run-length-encoded-list/",
+    },
+    {
+        "leetcode_id": 1342,
+        "title": "Steps to Reduce Number to Zero",
+        "difficulty": "Easy",
+        "category": "Math",
+        "description": "Given a non-negative integer num, return the number of steps to reduce it to zero. If num is even, divide by 2. If odd, subtract 1.",
+        "solution": """def numberOfSteps(num):
+    steps = 0
+    while num:
+        if num % 2 == 0:
+            num //= 2
+        else:
+            num -= 1
+        steps += 1
+    return steps""",
+        "solution_approach": "Simulation",
+        "examples": [
+            {
+                "input": "num = 14",
+                "output": "6",
+                "explanation": "14->7->6->3->2->1->0.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/number-of-steps-to-reduce-a-number-to-zero/",
+    },
+    {
+        "leetcode_id": 1351,
+        "title": "Count Negative Numbers in Sorted Matrix",
+        "difficulty": "Easy",
+        "category": "Array",
+        "description": "Given a matrix grid sorted in non-increasing order, return the count of negative numbers.",
+        "solution": """def countNegatives(grid):
+    count = 0
+    row = len(grid) - 1
+    col = 0
+    while row >= 0 and col < len(grid[0]):
+        if grid[row][col] < 0:
+            count += len(grid[0]) - col
+            row -= 1
+        else:
+            col += 1
+    return count""",
+        "solution_approach": "Diagonal Traversal",
+        "examples": [
+            {
+                "input": "grid = [[4,3,2,-1],[3,2,1,-1],[1,1,-1,-2],[-1,-1,-2,-3]]",
+                "output": "8",
+                "explanation": "8 negative numbers in the matrix.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/count-negative-numbers-in-a-sorted-matrix/",
+    },
+    {
+        "leetcode_id": 1356,
+        "title": "Sort by Number of 1 Bits",
+        "difficulty": "Easy",
+        "category": "Sorting",
+        "description": "Given an integer array arr, sort arr by the number of 1-bits in the binary representation.",
+        "solution": """def sortByBits(arr):
+    return sorted(arr, key=lambda x: (bin(x).count('1'), x))""",
+        "solution_approach": "Custom Sort",
+        "examples": [
+            {
+                "input": "arr = [0,1,2,3,4,5,6,7,8]",
+                "output": "[0,1,2,4,8,3,5,6,7]",
+                "explanation": "Sorted by number of 1-bits.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/sort-integers-by-the-number-of-1-bits/",
+    },
+    {
+        "leetcode_id": 1365,
+        "title": "Smaller Numbers Than Current",
+        "difficulty": "Easy",
+        "category": "Array",
+        "description": "Given the array nums, for each nums[i] find out how many numbers in the array are smaller than it.",
+        "solution": """def smallerNumbersThanCurrent(nums):
+    sorted_nums = sorted(nums)
+    return [sorted_nums.index(x) for x in nums]""",
+        "solution_approach": "Sorted Index Lookup",
+        "examples": [
+            {
+                "input": "nums = [8,1,2,2,3]",
+                "output": "[4,0,1,1,2]",
+                "explanation": "8 has 4 smaller, 1 has 0, etc.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/how-many-numbers-are-smaller-than-the-current-number/",
+    },
+    {
+        "leetcode_id": 1370,
+        "title": "Increase Decreasing String",
+        "difficulty": "Easy",
+        "category": "String",
+        "description": "Given a string s, repeatedly remove one occurrence of the smallest character, then the largest character.",
+        "solution": """def sortString(s):
+    from collections import Counter
+    count = Counter(s)
+    result = []
+    chars = sorted(count.keys())
+    while count:
+        for c in chars:
+            if count[c] > 0:
+                result.append(c)
+                count[c] -= 1
+        for c in reversed(chars):
+            if count[c] > 0:
+                result.append(c)
+                count[c] -= 1
+    return ''.join(result)""",
+        "solution_approach": "Two-pass Construction",
+        "examples": [
+            {
+                "input": "s = aaaabbbbcccc",
+                "output": "abccbaabccba",
+                "explanation": "String built by alternating smallest and largest.",
+            }
+        ],
+        "external_link": "https://leetcode.com/problems/increase-decreasing-string/",
+    },
 ]
 
 SEED_ALGORITHMS = [

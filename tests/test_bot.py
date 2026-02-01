@@ -52,7 +52,7 @@ class TestBotCommands:
 
         mock_update.message.reply_text.assert_called_once()
         call_args = mock_update.message.reply_text.call_args[0][0]
-        assert "LeetCode Bot Commands" in call_args
+        assert "Complete Command Reference" in call_args
         assert "/daily" in call_args
         assert "/help" in call_args
 
@@ -92,8 +92,8 @@ class TestBotCommands:
     @pytest.mark.asyncio
     async def test_gallery_command(self, mock_update, mock_context):
         with patch("main.algorithm_service") as mock_as:
-            mock_as.get_all_algorithms = MagicMock(return_value=[])
-            mock_as.get_categories = MagicMock(return_value=["Search", "Sorting"])
+            mock_as.get_all_algorithms = AsyncMock(return_value=[])
+            mock_as.get_categories = AsyncMock(return_value=["Search", "Sorting"])
 
             await gallery(mock_update, mock_context)
 
@@ -106,7 +106,7 @@ class TestBotCommands:
         mock_update.args = ["binary", "search"]
 
         with patch("main.algorithm_service") as mock_as:
-            mock_as.search_algorithms = MagicMock(
+            mock_as.search_algorithms = AsyncMock(
                 return_value=[
                     MagicMock(
                         name="Binary Search", category="Search", description="Test"
@@ -122,8 +122,14 @@ class TestBotCommands:
     async def test_search_algorithms_empty_query(self, mock_update, mock_context):
         mock_update.args = []
 
-        with patch("main.algorithm_service") as mock_as:
-            mock_as.search_algorithms = MagicMock(return_value=[])
+        with (
+            patch("main.algorithm_service") as mock_as,
+            patch(
+                "utils.rate_limiter.RateLimiter.check_rate_limit",
+                return_value=(True, 0),
+            ),
+        ):
+            mock_as.search_algorithms = AsyncMock(return_value=[])
 
             await search_algorithms(mock_update, mock_context)
 

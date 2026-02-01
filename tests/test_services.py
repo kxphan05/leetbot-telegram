@@ -46,48 +46,57 @@ class TestAlgorithmService:
     def algorithm_service(self):
         return AlgorithmService()
 
-    def test_get_all_algorithms(self, algorithm_service):
-        algorithms = algorithm_service.get_all_algorithms()
+    @pytest.mark.asyncio
+    async def test_get_all_algorithms(self, algorithm_service):
+        algorithms = await algorithm_service.get_all_algorithms()
         assert len(algorithms) > 0
         assert all(isinstance(a, Algorithm) for a in algorithms)
 
-    def test_algorithms_have_required_fields(self, algorithm_service):
-        algorithms = algorithm_service.get_all_algorithms()
+    @pytest.mark.asyncio
+    async def test_algorithms_have_required_fields(self, algorithm_service):
+        algorithms = await algorithm_service.get_all_algorithms()
         for algo in algorithms:
             assert algo.id is not None
             assert algo.name != ""
             assert algo.description != ""
             assert algo.implementation != ""
 
-    def test_search_algorithms(self, algorithm_service):
-        results = algorithm_service.search_algorithms("binary")
+    @pytest.mark.asyncio
+    async def test_search_algorithms(self, algorithm_service):
+        results = await algorithm_service.search_algorithms("binary")
         assert len(results) > 0
         assert any("binary" in a.name.lower() for a in results)
 
-    def test_search_algorithms_case_insensitive(self, algorithm_service):
-        results1 = algorithm_service.search_algorithms("BINARY")
-        results2 = algorithm_service.search_algorithms("binary")
+    @pytest.mark.asyncio
+    async def test_search_algorithms_case_insensitive(self, algorithm_service):
+        results1 = await algorithm_service.search_algorithms("BINARY")
+        results2 = await algorithm_service.search_algorithms("binary")
         assert len(results1) == len(results2)
 
-    def test_search_nonexistent(self, algorithm_service):
-        results = algorithm_service.search_algorithms("xyznonexistent123")
+    @pytest.mark.asyncio
+    async def test_search_nonexistent(self, algorithm_service):
+        results = await algorithm_service.search_algorithms("xyznonexistent123")
         assert len(results) == 0
 
-    def test_get_algorithm_by_category(self, algorithm_service):
-        results = algorithm_service.get_algorithm_by_category("Search")
+    @pytest.mark.asyncio
+    async def test_get_algorithm_by_category(self, algorithm_service):
+        results = await algorithm_service.get_algorithm_by_category("Search")
         assert len(results) > 0
         assert all(a.category == "Search" for a in results)
 
-    def test_get_algorithm_by_id(self, algorithm_service):
-        algo = algorithm_service.get_algorithm(algorithm_id=1)
+    @pytest.mark.asyncio
+    async def test_get_algorithm_by_id(self, algorithm_service):
+        algo = await algorithm_service.get_algorithm(algorithm_id=1)
         assert algo is not None
         assert algo.id == 1
 
-    def test_get_nonexistent_algorithm(self, algorithm_service):
-        algo = algorithm_service.get_algorithm(algorithm_id=999)
+    @pytest.mark.asyncio
+    async def test_get_nonexistent_algorithm(self, algorithm_service):
+        algo = await algorithm_service.get_algorithm(algorithm_id=999)
         assert algo is None
 
-    def test_get_categories(self, algorithm_service):
-        categories = algorithm_service.get_categories()
+    @pytest.mark.asyncio
+    async def test_get_categories(self, algorithm_service):
+        categories = await algorithm_service.get_categories()
         assert len(categories) > 0
         assert "Search" in categories
