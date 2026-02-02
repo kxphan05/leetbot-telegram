@@ -96,12 +96,12 @@ class NotificationService:
             
             message = (
                 f"🌅 *Good morning! Here's your daily LeetCode question:*\n\n"
-                f"*{question.title}* ({question.difficulty.value})\n"
-                f"Category: {question.category}\n"
+                f"*{escape_markdown(question.title, version=2)}* ({question.difficulty.value})\n"
+                f"Category: {escape_markdown(question.category, version=2)}\n"
             )
             if question.solution_approach:
-                message += f"Solution Approach: {question.solution_approach}\n"
-            message += f"\n{escape_markdown(question.description)}\n\n"
+                message += f"Solution Approach: {escape_markdown(question.solution_approach, version=2)}\n"
+            message += f"\n{escape_markdown(question.description, version=2)}\n\n"
             if question.external_link:
                 message += f"🔗 [View on LeetCode]({question.external_link})\n\n"
             message += "Use /solution to get the solution when you're ready!"
@@ -109,7 +109,7 @@ class NotificationService:
             await self.bot.send_message(
                 chat_id=int(telegram_id),
                 text=message,
-                parse_mode="Markdown",
+                parse_mode="MarkdownV2",
                 disable_web_page_preview=True
             )
             logger.info(f"Sent daily question to user {telegram_id}")
@@ -128,7 +128,7 @@ class NotificationService:
             await self.bot.send_message(
                 chat_id=int(telegram_id),
                 text="🔔 *Test Notification*\n\nYour notifications are working correctly!",
-                parse_mode="Markdown"
+                parse_mode="MarkdownV2"
             )
             return True
         except Exception as e:
