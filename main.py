@@ -10,6 +10,7 @@ from telegram.ext import (
     CallbackQueryHandler,
     filters,
 )
+from telegram.helpers import escape_markdown
 from models import User, Difficulty
 from services.question_service import question_service
 from services.user_service import user_service
@@ -425,12 +426,12 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
         message = (
             f"📅 *Today's Question*\n\n"
-            f"*{question.title}* ({question.difficulty.value})\n"
-            f"Category: {question.category}\n"
+            f"*{escape_markdown(question.title, version=2)}* \\({question.difficulty.value}\\)\n"
+            f"Category: {escape_markdown(question.category, version=2)}\n"
         )
         if question.solution_approach:
-            message += f"Solution Approach: {question.solution_approach}\n"
-        message += f"\n{question.description}\n\n"
+            message += f"Solution Approach: {escape_markdown(question.solution_approach, version=2)}\n"
+        message += f"\n{escape_markdown(question.description, version=2)}\n\n"
         if question.external_link:
             message += f"🔗 [View on LeetCode]({question.external_link})"
 
@@ -447,10 +448,10 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
         message = "📚 *Algorithm Gallery*\n\n*Categories:*\n"
         for cat in categories:
-            message += f"• {cat}\n"
+            message += f"• {escape_markdown(cat, version=2)}\n"
         message += "\n*Available Algorithms:*\n"
         for algo in algorithms[:8]:  # Limit to avoid message too long
-            message += f"• {algo.name} ({algo.category})\n"
+            message += f"• {escape_markdown(algo.name, version=2)} \\({escape_markdown(algo.category, version=2)}\\)\n"
         message += "\nUse /search <query> to find more."
 
         keyboard = [[InlineKeyboardButton("🏠 Main Menu", callback_data="menu")]]

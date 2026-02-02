@@ -96,7 +96,7 @@ class NotificationService:
             
             message = (
                 f"🌅 *Good morning! Here's your daily LeetCode question:*\n\n"
-                f"*{escape_markdown(question.title, version=2)}* ({question.difficulty.value})\n"
+                f"*{escape_markdown(question.title, version=2)}* \\({question.difficulty.value}\\)\n"
                 f"Category: {escape_markdown(question.category, version=2)}\n"
             )
             if question.solution_approach:
