@@ -219,7 +219,7 @@ async def gallery(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     keyboard = [[InlineKeyboardButton("🏠 Main Menu", callback_data="menu")]]
     await update.message.reply_text(
         message,
-        parse_mode="MarkdownV2",
+        parse_mode="Markdown",
         disable_web_page_preview=True,
         reply_markup=InlineKeyboardMarkup(keyboard),
     )
@@ -250,7 +250,7 @@ async def search_algorithms(update: Update, context: ContextTypes.DEFAULT_TYPE) 
         message += "\n"
 
     await update.message.reply_text(
-        message, parse_mode="MarkdownV2", disable_web_page_preview=True
+        message, parse_mode="Markdown", disable_web_page_preview=True
     )
 
 
@@ -446,17 +446,17 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         algorithms = await algorithm_service.get_all_algorithms()
         categories = await algorithm_service.get_categories()
 
-        message = "📚 *Algorithm Gallery*\n\n*Categories:*\n"
+        message = "📚 Algorithm Gallery\n\nCategories:\n"
         for cat in categories:
-            message += f"• {escape_markdown(cat, version=2)}\n"
-        message += "\n*Available Algorithms:*\n"
+            message += f"• {cat}\n"
+        message += "\nAvailable Algorithms:\n"
         for algo in algorithms[:8]:  # Limit to avoid message too long
-            message += f"• {escape_markdown(algo.name, version=2)} \\({escape_markdown(algo.category, version=2)}\\)\n"
+            message += f"• {algo.name} ({algo.category})\n"
         message += "\nUse /search <query> to find more."
 
         keyboard = [[InlineKeyboardButton("🏠 Main Menu", callback_data="menu")]]
         await query.edit_message_text(
-            message, parse_mode="MarkdownV2", reply_markup=InlineKeyboardMarkup(keyboard)
+            message, reply_markup=InlineKeyboardMarkup(keyboard)
         )
 
     elif data == "stats":
@@ -524,7 +524,7 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     elif data == "preferences":
         await query.edit_message_text(
             "⚙️ *Preferences*\n\nUse /preferences command to update your settings.",
-            parse_mode="MarkdownV2",
+            parse_mode="Markdown",
             reply_markup=InlineKeyboardMarkup(
                 [[InlineKeyboardButton("🏠 Main Menu", callback_data="menu")]]
             ),
@@ -543,7 +543,7 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         keyboard = [[InlineKeyboardButton("🏠 Main Menu", callback_data="menu")]]
         await query.edit_message_text(
             help_text,
-            parse_mode="MarkdownV2",
+            parse_mode="Markdown",
             reply_markup=InlineKeyboardMarkup(keyboard),
         )
 
