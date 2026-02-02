@@ -6,7 +6,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from telegram import Bot
 from telegram.error import TelegramError
-from telegram.utils.helpers import escape_markdown
+from telegram.helpers import escape_markdown
 
 from services.question_service import question_service
 from services.user_service import user_service
