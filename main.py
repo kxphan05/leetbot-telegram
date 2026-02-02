@@ -125,7 +125,7 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     )
     keyboard = [[InlineKeyboardButton("🏠 Main Menu", callback_data="menu")]]
     await update.message.reply_text(
-        help_text, parse_mode="Markdown", reply_markup=InlineKeyboardMarkup(keyboard)
+        help_text, parse_mode="MarkdownV2", reply_markup=InlineKeyboardMarkup(keyboard)
     )
 
 
@@ -156,7 +156,7 @@ async def daily_question(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 
     await update.message.reply_text(
         message,
-        parse_mode="Markdown",
+        parse_mode="MarkdownV2",
         disable_web_page_preview=True,
         reply_markup=get_question_keyboard(question.id),
     )
@@ -189,7 +189,7 @@ async def get_solution(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         ]
         await update.message.reply_text(
             message,
-            parse_mode="Markdown",
+            parse_mode="MarkdownV2",
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup(keyboard),
         )
@@ -218,7 +218,7 @@ async def gallery(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     keyboard = [[InlineKeyboardButton("🏠 Main Menu", callback_data="menu")]]
     await update.message.reply_text(
         message,
-        parse_mode="Markdown",
+        parse_mode="MarkdownV2",
         disable_web_page_preview=True,
         reply_markup=InlineKeyboardMarkup(keyboard),
     )
@@ -249,7 +249,7 @@ async def search_algorithms(update: Update, context: ContextTypes.DEFAULT_TYPE) 
         message += "\n"
 
     await update.message.reply_text(
-        message, parse_mode="Markdown", disable_web_page_preview=True
+        message, parse_mode="MarkdownV2", disable_web_page_preview=True
     )
 
 
@@ -286,7 +286,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")],
     ]
     await update.message.reply_text(
-        message, parse_mode="Markdown", reply_markup=InlineKeyboardMarkup(keyboard)
+        message, parse_mode="MarkdownV2", reply_markup=InlineKeyboardMarkup(keyboard)
     )
 
 
@@ -344,7 +344,7 @@ async def streak_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")],
     ]
     await update.message.reply_text(
-        message, parse_mode="Markdown", reply_markup=InlineKeyboardMarkup(keyboard)
+        message, parse_mode="MarkdownV2", reply_markup=InlineKeyboardMarkup(keyboard)
     )
 
 
@@ -393,7 +393,7 @@ async def history_command(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     ]
     await update.message.reply_text(
         message,
-        parse_mode="Markdown",
+        parse_mode="MarkdownV2",
         disable_web_page_preview=True,
         reply_markup=InlineKeyboardMarkup(keyboard),
     )
@@ -413,7 +413,7 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     if data == "menu":
         await query.edit_message_text(
             "🏠 *Main Menu*\n\nWhat would you like to do?",
-            parse_mode="Markdown",
+            parse_mode="MarkdownV2",
             reply_markup=get_main_menu_keyboard(),
         )
 
@@ -436,7 +436,7 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
         await query.edit_message_text(
             message,
-            parse_mode="Markdown",
+            parse_mode="MarkdownV2",
             disable_web_page_preview=True,
             reply_markup=get_question_keyboard(question.id),
         )
@@ -455,7 +455,7 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 
         keyboard = [[InlineKeyboardButton("🏠 Main Menu", callback_data="menu")]]
         await query.edit_message_text(
-            message, parse_mode="Markdown", reply_markup=InlineKeyboardMarkup(keyboard)
+            message, parse_mode="MarkdownV2", reply_markup=InlineKeyboardMarkup(keyboard)
         )
 
     elif data == "stats":
@@ -475,7 +475,7 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
             [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")],
         ]
         await query.edit_message_text(
-            message, parse_mode="Markdown", reply_markup=InlineKeyboardMarkup(keyboard)
+            message, parse_mode="MarkdownV2", reply_markup=InlineKeyboardMarkup(keyboard)
         )
 
     elif data == "streak":
@@ -497,7 +497,7 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
             [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")],
         ]
         await query.edit_message_text(
-            message, parse_mode="Markdown", reply_markup=InlineKeyboardMarkup(keyboard)
+            message, parse_mode="MarkdownV2", reply_markup=InlineKeyboardMarkup(keyboard)
         )
 
     elif data == "history":
@@ -517,13 +517,13 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
             [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")],
         ]
         await query.edit_message_text(
-            message, parse_mode="Markdown", reply_markup=InlineKeyboardMarkup(keyboard)
+            message, parse_mode="MarkdownV2", reply_markup=InlineKeyboardMarkup(keyboard)
         )
 
     elif data == "preferences":
         await query.edit_message_text(
             "⚙️ *Preferences*\n\nUse /preferences command to update your settings.",
-            parse_mode="Markdown",
+            parse_mode="MarkdownV2",
             reply_markup=InlineKeyboardMarkup(
                 [[InlineKeyboardButton("🏠 Main Menu", callback_data="menu")]]
             ),
@@ -542,7 +542,7 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         keyboard = [[InlineKeyboardButton("🏠 Main Menu", callback_data="menu")]]
         await query.edit_message_text(
             help_text,
-            parse_mode="Markdown",
+            parse_mode="MarkdownV2",
             reply_markup=InlineKeyboardMarkup(keyboard),
         )
 
@@ -566,7 +566,7 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         ]
         await query.edit_message_text(
             message,
-            parse_mode="Markdown",
+            parse_mode="MarkdownV2",
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup(keyboard),
         )
@@ -589,7 +589,7 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
             [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")],
         ]
         await query.edit_message_text(
-            message, parse_mode="Markdown", reply_markup=InlineKeyboardMarkup(keyboard)
+            message, parse_mode="MarkdownV2", reply_markup=InlineKeyboardMarkup(keyboard)
         )
 
 
@@ -615,7 +615,7 @@ async def preferences(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
         "3. Notification Time\n\n"
         "Reply with the number of your choice, or /cancel to go back."
     )
-    await update.message.reply_text(message, parse_mode="Markdown")
+    await update.message.reply_text(message, parse_mode="MarkdownV2")
     return SET_DIFFICULTY
 
 
