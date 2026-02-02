@@ -6,6 +6,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from telegram import Bot
 from telegram.error import TelegramError
+from telegram.utils.helpers import escape_markdown
 
 from services.question_service import question_service
 from services.user_service import user_service
@@ -100,7 +101,7 @@ class NotificationService:
             )
             if question.solution_approach:
                 message += f"Solution Approach: {question.solution_approach}\n"
-            message += f"\n{question.description}\n\n"
+            message += f"\n{escape_markdown(question.description)}\n\n"
             if question.external_link:
                 message += f"🔗 [View on LeetCode]({question.external_link})\n\n"
             message += "Use /solution to get the solution when you're ready!"
