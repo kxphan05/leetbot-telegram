@@ -445,20 +445,6 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
             )
         except Exception:
             pass
-        except Exception:
-            pass
-        if question.solution_approach:
-            message += f"Solution Approach: {escape_markdown(question.solution_approach, version=2)}\n"
-        message += f"\n{escape_markdown(question.description, version=2)}\n\n"
-        if question.external_link:
-            message += f"🔗 [View on LeetCode]({question.external_link})"
-
-        await query.edit_message_text(
-            message,
-            parse_mode="MarkdownV2",
-            disable_web_page_preview=True,
-            reply_markup=get_question_keyboard(question.id),
-        )
 
     elif data == "gallery":
         algorithms = await algorithm_service.get_all_algorithms()
