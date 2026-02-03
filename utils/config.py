@@ -10,6 +10,7 @@ class Config:
     default_timezone: str = "UTC"
     default_notification_time: str = "09:00"
     cache_ttl: int = 86400
+    admin_port: int = 8002
 
     @classmethod
     def from_env(cls) -> "Config":
@@ -18,8 +19,11 @@ class Config:
             redis_url=os.getenv("REDIS_URL", cls.redis_url),
             graphql_url=os.getenv("GRAPHQL_URL", cls.graphql_url),
             default_timezone=os.getenv("DEFAULT_TIMEZONE", cls.default_timezone),
-            default_notification_time=os.getenv("DEFAULT_NOTIFICATION_TIME", cls.default_notification_time),
+            default_notification_time=os.getenv(
+                "DEFAULT_NOTIFICATION_TIME", cls.default_notification_time
+            ),
             cache_ttl=int(os.getenv("CACHE_TTL", str(cls.cache_ttl))),
+            admin_port=int(os.getenv("ADMIN_PORT", str(cls.admin_port))),
         )
 
 
