@@ -38,11 +38,6 @@ app.add_middleware(
 
 admin = Admin(app, sync_engine)
 
-admin.add_view(UserAdmin)
-admin.add_view(QuestionAdmin)
-admin.add_view(AlgorithmAdmin)
-admin.add_view(UserQuestionAdmin)
-
 
 class UserAdmin(ModelView, model=UserDB):
     column_list = [
@@ -136,3 +131,9 @@ class UserQuestionAdmin(ModelView, model=UserQuestionDB):
     can_edit = True
     name = "User Question"
     name_plural = "User Questions"
+
+
+admin.add_view(UserAdmin)
+admin.add_view(QuestionAdmin)
+admin.add_view(AlgorithmAdmin)
+admin.add_view(UserQuestionAdmin)
