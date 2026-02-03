@@ -41,27 +41,26 @@ admin = Admin(app, sync_engine)
 
 class UserAdmin(ModelView, model=UserDB):
     column_list = [
-        UserDB.id,
-        UserDB.telegram_id,
-        UserDB.username,
-        UserDB.streak,
-        UserDB.longest_streak,
-        UserDB.total_questions,
-        UserDB.difficulty,
-        UserDB.notifications_enabled,
-        UserDB.created_at,
-        UserDB.last_active,
+        "id",
+        "telegram_id",
+        "username",
+        "streak",
+        "longest_streak",
+        "total_questions",
+        "difficulty",
+        "notifications_enabled",
+        "created_at",
+        "last_active",
     ]
-    column_searchable_list = [UserDB.telegram_id, UserDB.username]
+    column_searchable_list = ["telegram_id", "username"]
     column_sortable_list = [
-        UserDB.id,
-        UserDB.streak,
-        UserDB.longest_streak,
-        UserDB.total_questions,
-        UserDB.created_at,
-        UserDB.last_active,
+        "id",
+        "streak",
+        "longest_streak",
+        "total_questions",
+        "created_at",
+        "last_active",
     ]
-    column_filters = [UserDB.difficulty, UserDB.notifications_enabled]
     can_create = False
     can_delete = False
     can_edit = True
@@ -71,20 +70,19 @@ class UserAdmin(ModelView, model=UserDB):
 
 class QuestionAdmin(ModelView, model=QuestionDB):
     column_list = [
-        QuestionDB.id,
-        QuestionDB.leetcode_id,
-        QuestionDB.title,
-        QuestionDB.difficulty,
-        QuestionDB.category,
-        QuestionDB.created_at,
+        "id",
+        "leetcode_id",
+        "title",
+        "difficulty",
+        "category",
+        "created_at",
     ]
-    column_searchable_list = [QuestionDB.title, QuestionDB.category]
+    column_searchable_list = ["title", "category"]
     column_sortable_list = [
-        QuestionDB.id,
-        QuestionDB.leetcode_id,
-        QuestionDB.difficulty,
+        "id",
+        "leetcode_id",
+        "difficulty",
     ]
-    column_filters = [QuestionDB.difficulty, QuestionDB.category]
     can_create = False
     can_delete = False
     can_edit = True
@@ -94,15 +92,14 @@ class QuestionAdmin(ModelView, model=QuestionDB):
 
 class AlgorithmAdmin(ModelView, model=AlgorithmDB):
     column_list = [
-        AlgorithmDB.id,
-        AlgorithmDB.name,
-        AlgorithmDB.category,
-        AlgorithmDB.complexity,
-        AlgorithmDB.created_at,
+        "id",
+        "name",
+        "category",
+        "complexity",
+        "created_at",
     ]
-    column_searchable_list = [AlgorithmDB.name, AlgorithmDB.category]
-    column_sortable_list = [AlgorithmDB.id, AlgorithmDB.category]
-    column_filters = [AlgorithmDB.category]
+    column_searchable_list = ["name", "category"]
+    column_sortable_list = ["id", "category"]
     can_create = False
     can_delete = False
     can_edit = True
@@ -112,20 +109,19 @@ class AlgorithmAdmin(ModelView, model=AlgorithmDB):
 
 class UserQuestionAdmin(ModelView, model=UserQuestionDB):
     column_list = [
-        UserQuestionDB.id,
-        UserQuestionDB.telegram_id,
-        UserQuestionDB.question_id,
-        UserQuestionDB.completed,
-        UserQuestionDB.viewed_at,
-        UserQuestionDB.completed_at,
+        "id",
+        "telegram_id",
+        "question_id",
+        "completed",
+        "viewed_at",
+        "completed_at",
     ]
-    column_searchable_list = [UserQuestionDB.telegram_id]
+    column_searchable_list = ["telegram_id"]
     column_sortable_list = [
-        UserQuestionDB.id,
-        UserQuestionDB.question_id,
-        UserQuestionDB.viewed_at,
+        "id",
+        "question_id",
+        "viewed_at",
     ]
-    column_filters = [UserQuestionDB.completed]
     can_create = False
     can_delete = False
     can_edit = True
