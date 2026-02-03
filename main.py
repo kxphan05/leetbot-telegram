@@ -476,7 +476,9 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
             [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")],
         ]
         await query.edit_message_text(
-            message, parse_mode="MarkdownV2", reply_markup=InlineKeyboardMarkup(keyboard)
+            message,
+            parse_mode="MarkdownV2",
+            reply_markup=InlineKeyboardMarkup(keyboard),
         )
 
     elif data == "streak":
@@ -498,7 +500,9 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
             [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")],
         ]
         await query.edit_message_text(
-            message, parse_mode="MarkdownV2", reply_markup=InlineKeyboardMarkup(keyboard)
+            message,
+            parse_mode="MarkdownV2",
+            reply_markup=InlineKeyboardMarkup(keyboard),
         )
 
     elif data == "history":
@@ -518,7 +522,9 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
             [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")],
         ]
         await query.edit_message_text(
-            message, parse_mode="MarkdownV2", reply_markup=InlineKeyboardMarkup(keyboard)
+            message,
+            parse_mode="MarkdownV2",
+            reply_markup=InlineKeyboardMarkup(keyboard),
         )
 
     elif data == "preferences":
@@ -580,9 +586,9 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
         streak = streak_info.get("current_streak", 1) if streak_info else 1
 
         message = (
-            f"✅ *Question Completed!*\n\n"
+            f"✅ *Question Completed\\!*\n\n"
             f"🔥 Current Streak: {streak} days\n\n"
-            "Great work! Keep it up! 💪"
+            "Great work\\! Keep it up\\! 💪"
         )
 
         keyboard = [
@@ -590,7 +596,9 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
             [InlineKeyboardButton("🏠 Main Menu", callback_data="menu")],
         ]
         await query.edit_message_text(
-            message, parse_mode="MarkdownV2", reply_markup=InlineKeyboardMarkup(keyboard)
+            message,
+            parse_mode="MarkdownV2",
+            reply_markup=InlineKeyboardMarkup(keyboard),
         )
 
 
