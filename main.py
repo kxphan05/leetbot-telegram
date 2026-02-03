@@ -445,6 +445,8 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
             )
         except Exception:
             pass
+        except Exception:
+            pass
         if question.solution_approach:
             message += f"Solution Approach: {escape_markdown(question.solution_approach, version=2)}\n"
         message += f"\n{escape_markdown(question.description, version=2)}\n\n"
