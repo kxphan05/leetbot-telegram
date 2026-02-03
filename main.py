@@ -421,7 +421,7 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     elif data == "daily":
         user_data = await user_service.get_user(str(user.id))
         difficulty = user_data.difficulty if user_data else None
-        question = await question_service.get_daily_question(difficulty)
+        question = await question_service.get_next_question(difficulty)
         context.user_data["current_question_id"] = question.id
 
         message = (

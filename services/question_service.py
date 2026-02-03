@@ -55,33 +55,46 @@ class QuestionService:
         if cached_data:
             return Question(**json.loads(cached_data))
 
+        question = await self._get_random_question_from_db(difficulty)
+        if question:
+            # Cache for 24 hours
+            await cache.set(
+                cache_key,
+                json.dumps(question.model_dump(), default=str),
+                ttl=86400,
+            )
+        return question or self._get_fallback_question(difficulty)
+
+    async def get_next_question(
+        self, difficulty: Optional[Difficulty] = None
+    ) -> Question:
+        """Get a fresh random question, bypassing cache."""
+        question = await self._get_random_question_from_db(difficulty)
+        if question:
+            return question
+        return self._get_fallback_question(difficulty)
+
+    async def _get_random_question_from_db(
+        self, difficulty: Optional[Difficulty] = None
+    ) -> Optional[Question]:
+        """Get a random question from database."""
         try:
             async with AsyncSessionLocal() as session:
-                # Build query
                 query = select(QuestionDB)
                 if difficulty:
                     query = query.where(QuestionDB.difficulty == difficulty.value)
 
-                # Get random question
                 query = query.order_by(func.random()).limit(1)
                 result = await session.execute(query)
                 db_question = result.scalar_one_or_none()
 
                 if db_question:
-                    question = self._db_to_model(db_question)
-                    # Cache for 24 hours
-                    await cache.set(
-                        cache_key,
-                        json.dumps(question.model_dump(), default=str),
-                        ttl=86400,
-                    )
-                    return question
+                    return self._db_to_model(db_question)
 
         except Exception as e:
-            logger.warning(f"Database query failed, using fallback: {e}")
+            logger.warning(f"Database query failed: {e}")
 
-        # Fallback to hardcoded questions if DB unavailable
-        return self._get_fallback_question(difficulty)
+        return None
 
     def _get_fallback_question(
         self, difficulty: Optional[Difficulty] = None
